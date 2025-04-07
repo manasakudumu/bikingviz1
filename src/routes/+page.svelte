@@ -196,7 +196,6 @@
         const query = await fetch(url, { method: 'GET' });
         isochrone = await query.json();
     }
-    getIso(-71.09415, 42.36027);
 
 
     //selecting a station
@@ -218,12 +217,11 @@
 	}
 	return path.toString();
 }
-
-
-
-
-
-
+$: if (selectedStation) {
+	getIso(+selectedStation.Long, +selectedStation.Lat);
+} else {
+	isochrone = null;
+}
 
 
 </script>
@@ -264,9 +262,17 @@
                 {/each}
             {/if}
             {#each filteredStations as station}
-            <circle { ...getCoords(station) } r={radiusScale(station.totalTraffic)} fill="steelblue" fill-opacity=0.6 stroke="white" style="--departure-ratio: { stationFlow(station.departures / station.totalTraffic) }" class={station?.Number === selectedStation?.Number ? "selected" : ""}
-            on:mousedown={() => selectedStation = selectedStation?.Number !== station?.Number ? station : null}>
-                <title>{station.totalTraffic} trips ({station.departures} departures, { station.arrivals} arrivals)</title>
+            <circle {...getCoords(station)}
+                r={radiusScale(station.totalTraffic)} 
+                fill="steelblue" fill-opacity=0.6 
+                stroke="white" 
+                style="--departure-ratio: { stationFlow(station.departures / station.totalTraffic) }" 
+                class={station?.Number === selectedStation?.Number ? "selected" : ""}
+                on:mousedown={() => 
+                    selectedStation = selectedStation?.Number !== station?.Number ? station : null}>
+                <title>
+                    {station.totalTraffic}trips({station.departures} departures, { station.arrivals} arrivals)
+                </title>
             </circle>
             {/each}
             {/key}

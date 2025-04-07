@@ -35,9 +35,6 @@ circle {
 	);
 	fill: var(--color);
 	transition: opacity 0.2s ease;
-	&:has(circle.selected) circle:not(.selected) {
-		opacity: 0.3;
-	}
 }
 
 #map svg:has(circle.selected) circle:not(.selected) {
@@ -109,4 +106,3 @@ h1{
 	background-color: var(--color);
 	border: 1px solid #3333;
 }
-
